@@ -67,6 +67,18 @@ public class GameGrid : MonoBehaviour {
 
 	}
 
+	public void GameGridLeft () {
+		CheckBlockLeft (true);
+		Debug.Log ("Left");
+
+	}
+
+		public void GameGridRight () {
+		CheckBlockRight (true);
+		Debug.Log ("Right");
+
+	}
+
 	public void CheckBlockDown (bool yes) {
 		for (int i = 0; i < height; i++) {
 			for (int u = 0; u < weight; u++) {
@@ -94,6 +106,7 @@ public class GameGrid : MonoBehaviour {
 	public void CheckBlockUP (bool yes) {
 		for (int i = 0; i < height; i++) {
 			for (int u = weight - 1; u > -1; u--) {
+				Debug.Log ("i = " + i + " , " + " u = " + u);
 				if (game[i, u] == null && u - 1 != -1) {
 					for (int o = u; o > -1; o--)
 						if (o - 1 != -1 && game[i, o - 1] != null) {
@@ -111,30 +124,60 @@ public class GameGrid : MonoBehaviour {
 			CheckUP ();
 			CreateGameBlock (height, weight, -5);
 		}
-
 	}
 
 	public void CheckBlockLeft (bool yes) {
-		for (int i = 0; i < height; i++) {
-			for (int u = weight - 1; u > -1; u--) {
-				if (game[i, u] == null && u - 1 != -1) {
-					for (int o = u; o > -1; o--)
-						if (o - 1 != -1 && game[i, o - 1] != null) {
+		for (int u = 0; u < height; u++) {
+			for (int i = 0; i < height; i++) {
+				// Debug.Log("i = " + i + " , " + " u = " + u);
+				if (game[i, u] == null && i + 1 != weight) {
+					for (int o = i; o < weight; o++) {
+						if (o + 1 != weight && game[o + 1, u] != null) {
 							GameObject gameObject = game[i, u];
-							game[i, o - 1].transform.DOMove (new Vector3 (i, u, -5), 0f);
-							game[i, u] = game[i, o - 1];
+							game[o + 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							game[i, u] = game[o + 1, u];
+							game[o + 1, u] = gameObject;
 							game[i, u].GetComponent<SpriteRenderer> ().color = myColor[0];
-							game[i, o - 1] = gameObject;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (yes) {
+			CheckLeft ();
+			CreateGameBlock (height, weight, -5);
+		}
+	}
+
+	public void CheckBlockRight (bool yes) {
+		for (int u = weight - 1; u > -1; u--) {
+			for (int i = weight - 1; i > -1; i--) {
+			// for (int i = 0; i < height; i++) {
+				Debug.Log ("i = " + i + " , " + " u = " + u);
+				// if (game[i, u] == null && i - 1 != -1) {
+					if (game[i, u] == null) {
+					// for (int o = i; o > -1; o--)
+					// for (int o = i; o < height; o++)
+					 for (int o = i; o > -1; o--)
+						if (o - 1 != -1 && game[o - 1, u] != null) {
+							// if ( game[o - 1, u] != null) {
+								// if ( game[o, u] != null) {
+							GameObject gameObject = game[i, u];
+							game[o - 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							game[i, u] = game[o - 1, u];
+							game[i, u].GetComponent<SpriteRenderer> ().color = myColor[0];
+							game[o - 1, u] = gameObject;
 							break;
 						}
 				}
 			}
 		}
 		if (yes) {
-			CheckLeft ();
+			CheckRight ();
 			CreateGameBlock (height, weight, -5);
 		}
-
 	}
 
 	private void CheckUP () {
@@ -147,6 +190,37 @@ public class GameGrid : MonoBehaviour {
 						Destroy (game[i, u - 1].gameObject);
 						game[i, u - 1] = null;
 						CheckBlockUP (false);
+					}
+				}
+			}
+		}
+	}
+
+	private void CheckRight () {
+		for (int u = weight - 1; u > -1; u--) {
+			for (int i = 0; i < height; i++) {
+				if (game[i, u] != null && i - 1 != -1 && game[i - 1, u] != null) {
+					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i - 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
+						// GameObject new1 =  gameGridBackcgound[i, u-1];
+						Destroy (game[i - 1, u].gameObject);
+						game[i - 1, u] = null;
+						CheckBlockUP (false);
+					}
+				}
+			}
+		}
+	}
+
+	private void CheckLeft () {
+		for (int u = 0; u < height; u++) {
+			for (int i = 0; i < weight; i++) {
+				if (game[i, u] != null && i + 1 != weight && game[i + 1, u] != null) {
+					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i + 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
+						Destroy (game[i + 1, u].gameObject);
+						game[i + 1, u] = null;
+						CheckBlockLeft (false);
 					}
 				}
 			}
