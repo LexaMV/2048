@@ -7,14 +7,14 @@ using UnityEngine;
 
 public class GameGrid : MonoBehaviour {
 
-public UI ui;
+	public UI ui;
 
-[Serializable]
- public struct Map {
-     public int number;
-     public Color color;
- }
-    public Map[] colors;
+	[Serializable]
+	public struct Map {
+		public int number;
+		public Color color;
+	}
+	public Map[] colors;
 	public GameObject cubik;
 	public GameObject gameRectangle;
 	public int height;
@@ -24,28 +24,27 @@ public UI ui;
 	public static float POS_OFFSET_Y = 0;
 	public GameObject backGroundBlocks;
 	public GameObject gameBlocks;
-	private GameObject[,] gameGridBackcgound;
-	private GameObject[,] game;
+	private GameObject[, ] gameGridBackcgound;
+	private GameObject[, ] game;
 
-	void Start () {
+	void LevelStart () {
 		CreateGameArray (height, weight);
 		CreateBackgroundGameGrid (height, weight);
 		CreateGameBlock (height, weight, -5);
 	}
 
-    private Color AddColorToBlock(int a)
-    {
-		Color color = new Color();
-		foreach(var m in colors){
-			if(m.number == a){
+	private Color AddColorToBlock (int a) {
+		Color color = new Color ();
+		foreach (var m in colors) {
+			if (m.number == a) {
 				color = m.color;
 			}
 		}
 
-       return color;
-    }
+		return color;
+	}
 
-    public void CreateGameArray (int height, int weight) {
+	public void CreateGameArray (int height, int weight) {
 		gameGridBackcgound = new GameObject[height, weight];
 		game = new GameObject[height, weight];
 	}
@@ -55,7 +54,7 @@ public UI ui;
 		for (int i = 0; i < height; i++) {
 			for (int u = 0; u < weight; u++) {
 				gameGridBackcgound[i, u] = Instantiate (cubik, FixTransformBlockXY (i, u), Quaternion.identity);
-				gameGridBackcgound[i,u].transform.SetParent(backGroundBlocks.transform);
+				gameGridBackcgound[i, u].transform.SetParent (backGroundBlocks.transform);
 			}
 		}
 	}
@@ -65,16 +64,14 @@ public UI ui;
 		int b = UnityEngine.Random.Range (0, weight);
 		if (game[a, b] == null) {
 			game[a, b] = Instantiate (gameRectangle, FixTransformBlockXYZ (a, b, z), Quaternion.identity);
-			game[a, b].transform.SetParent(gameBlocks.transform);
-			int s = Convert.ToInt32(game[a, b].transform.Find ("Text").GetComponent<TextMeshPro>().text); 
-			game[a, b].GetComponent<SpriteRenderer> ().color = AddColorToBlock(s);
-			game[a, b].transform.DOScale(0.15f, 0.1f).SetLoops(2,LoopType.Yoyo);
-		}
-		else {
+			game[a, b].transform.SetParent (gameBlocks.transform);
+			int s = Convert.ToInt32 (game[a, b].transform.Find ("Text").GetComponent<TextMeshPro> ().text);
+			game[a, b].GetComponent<SpriteRenderer> ().color = AddColorToBlock (s);
+			game[a, b].transform.DOScale (0.15f, 0.1f).SetLoops (2, LoopType.Yoyo);
+		} else {
 			CreateGameBlock (height, weight, -5);
 		}
 	}
-
 
 	public void GoBlockDown (bool yes) {
 		for (int i = 0; i < height; i++) {
@@ -148,20 +145,13 @@ public UI ui;
 	public void GoBlockRight (bool yes) {
 		for (int u = weight - 1; u > -1; u--) {
 			for (int i = weight - 1; i > -1; i--) {
-			// for (int i = 0; i < height; i++) {
 				Debug.Log ("i = " + i + " , " + " u = " + u);
-				// if (game[i, u] == null && i - 1 != -1) {
-					if (game[i, u] == null) {
-					// for (int o = i; o > -1; o--)
-					// for (int o = i; o < height; o++)
-					 for (int o = i; o > -1; o--)
+				if (game[i, u] == null) {
+					for (int o = i; o > -1; o--)
 						if (o - 1 != -1 && game[o - 1, u] != null) {
-							// if ( game[o - 1, u] != null) {
-								// if ( game[o, u] != null) {
 							GameObject gameObject = game[i, u];
 							game[o - 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
 							game[i, u] = game[o - 1, u];
-							// game[i, u].GetComponent<SpriteRenderer> ().color = myColor[0];
 							game[o - 1, u] = gameObject;
 							break;
 						}
@@ -179,12 +169,10 @@ public UI ui;
 			for (int u = weight - 1; u > -1; u--) {
 				if (game[i, u] != null && u - 1 != -1 && game[i, u - 1] != null) {
 					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i, u - 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
-						int s = Convert.ToInt32(game[i, u].transform.Find ("Text").GetComponent<TextMeshPro>().text); 
-						int a = Convert.ToInt32(ui.score.text);
-						ui.score.text = (s+a).ToString();
-						ui.UpdateRecordPoint();
-			            game[i, u].GetComponent<SpriteRenderer> ().color = AddColorToBlock(s);
+						MultiplicationBy2 (game[i, u]);
+						SetScore (game[i, u]);
+						SetColor (game[i, u]);
+						ui.UpdateRecordPoint ();
 						Destroy (game[i, u - 1].gameObject);
 						game[i, u - 1] = null;
 						GoBlockUP (false);
@@ -199,12 +187,10 @@ public UI ui;
 			for (int i = 0; i < height; i++) {
 				if (game[i, u] != null && i - 1 != -1 && game[i - 1, u] != null) {
 					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i - 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
-						int s = Convert.ToInt32(game[i, u].transform.Find ("Text").GetComponent<TextMeshPro>().text); 
-						int a = Convert.ToInt32(ui.score.text);
-						ui.score.text = (s+a).ToString();
-						ui.UpdateRecordPoint();
-			            game[i, u].GetComponent<SpriteRenderer> ().color = AddColorToBlock(s);
+						MultiplicationBy2 (game[i, u]);
+						SetScore (game[i, u]);
+						SetColor (game[i, u]);
+						ui.UpdateRecordPoint ();
 						Destroy (game[i - 1, u].gameObject);
 						game[i - 1, u] = null;
 						GoBlockUP (false);
@@ -219,12 +205,10 @@ public UI ui;
 			for (int i = 0; i < weight; i++) {
 				if (game[i, u] != null && i + 1 != weight && game[i + 1, u] != null) {
 					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i + 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
-						int s = Convert.ToInt32(game[i, u].transform.Find ("Text").GetComponent<TextMeshPro>().text); 
-						int a = Convert.ToInt32(ui.score.text);
-						ui.score.text = (s+a).ToString();
-						ui.UpdateRecordPoint();
-			            game[i, u].GetComponent<SpriteRenderer> ().color = AddColorToBlock(s);
+						MultiplicationBy2 (game[i, u]);
+						SetScore (game[i, u]);
+						SetColor (game[i, u]);
+						ui.UpdateRecordPoint ();
 						Destroy (game[i + 1, u].gameObject);
 						game[i + 1, u] = null;
 						GoBlockLeft (false);
@@ -239,12 +223,10 @@ public UI ui;
 			for (int u = 0; u < weight; u++) {
 				if (game[i, u] != null && u + 1 != weight && game[i, u + 1] != null) {
 					if (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (game[i, u + 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-						game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (game[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
-						int s = Convert.ToInt32(game[i, u].transform.Find ("Text").GetComponent<TextMeshPro>().text); 
-						int a = Convert.ToInt32(ui.score.text);
-						ui.score.text = (s+a).ToString();
-						ui.UpdateRecordPoint();
-			            game[i, u].GetComponent<SpriteRenderer> ().color = AddColorToBlock(s);
+						MultiplicationBy2 (game[i, u]);
+						SetScore (game[i, u]);
+						SetColor (game[i, u]);
+						ui.UpdateRecordPoint ();
 						Destroy (game[i, u + 1].gameObject);
 						game[i, u + 1] = null;
 						GoBlockDown (false);
@@ -254,6 +236,20 @@ public UI ui;
 		}
 	}
 
+	private void MultiplicationBy2 (GameObject gameObject) {
+		gameObject.transform.Find ("Text").GetComponent<TextMeshPro> ().text = (Convert.ToInt32 (gameObject.transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) * 2).ToString ();
+	}
+
+	private void SetColor (GameObject gameObject) {
+		int s = Convert.ToInt32 (gameObject.transform.Find ("Text").GetComponent<TextMeshPro> ().text);
+		gameObject.GetComponent<SpriteRenderer> ().color = AddColorToBlock (s);
+	}
+
+	private void SetScore (GameObject gameObject) {
+		int s = Convert.ToInt32 (gameObject.transform.Find ("Text").GetComponent<TextMeshPro> ().text);
+		int a = Convert.ToInt32 (ui.score.text);
+		ui.score.text = (s + a).ToString ();
+	}
 	public static Vector3 FixTransformBlockXY (int x, int y) {
 		return new Vector3 ((x + POS_OFFSET_X) * POS_SCALE, (y + POS_OFFSET_Y) * POS_SCALE, 0);
 	}

@@ -5,6 +5,28 @@ using UnityEngine;
 public class Сontroller : MonoBehaviour
 {
     public GameGrid gameGrid;
+	private GameObject firstScreen;
+	private GameObject secondScreen;
+	
+	void Awake(){
+		firstScreen = GameObject.Find("FirstScreen");
+		secondScreen = GameObject.Find("SecondScreen");
+	}
+	void Start(){
+	        secondScreen.SetActive(false);
+	}
+
+	public void FirstScreenActive(){
+		firstScreen.SetActive(true);
+		secondScreen.SetActive(false);
+	}
+
+	public void SecondScreenActive(){
+		firstScreen.SetActive(false);
+		secondScreen.SetActive(true);
+	}
+
+
     public void GameGridDown () {
 
 		gameGrid.GoBlockDown (true);
