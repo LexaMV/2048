@@ -29,6 +29,7 @@ namespace Lean.Touch
 
 			if (showEvents == true)
 			{
+				Debug.Log("1");
 				DrawDefault("OnSelect");
 				DrawDefault("OnSelectSet");
 				DrawDefault("OnSelectUp");
@@ -81,9 +82,10 @@ namespace Lean.Touch
 				// Hide IsSelected?
 				if (HideWithFinger == true && isSelected == true && selectingFingers.Count > 0)
 				{
+					Debug.Log("2");
 					return false;
 				}
-
+                Debug.Log(gameObject.name);
 				return isSelected;
 			}
 		}

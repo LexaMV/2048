@@ -17,8 +17,8 @@ public class GameGrid : MonoBehaviour {
 	public Map[] colors;
 	public GameObject cubik;
 	public GameObject gameRectangle;
-	public int height;
-	public int weight;
+	private int height;
+	private int weight;
 	public static float POS_SCALE = 1f;
 	public static float POS_OFFSET_X = 0;
 	public static float POS_OFFSET_Y = 0;
@@ -27,7 +27,10 @@ public class GameGrid : MonoBehaviour {
 	private GameObject[, ] gameGridBackcgound;
 	private GameObject[, ] game;
 
-	void LevelStart () {
+	public void LevelStart (int height, int weight) {
+		this.height = height;
+		this.weight = height;
+
 		CreateGameArray (height, weight);
 		CreateBackgroundGameGrid (height, weight);
 		CreateGameBlock (height, weight, -5);
