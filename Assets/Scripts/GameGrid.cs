@@ -56,7 +56,7 @@ public class GameGrid : MonoBehaviour {
 		for (int i = 0; i < height; i++) {
 			for (int u = 0; u < weight; u++) {
 				containerGameGridBackgound[i, u] = Instantiate (backGroundCubePrefab, FixTransformBlockXY (i, u), Quaternion.identity);
-				containerGameGridBackgound[i, u].transform.SetParent (UIbackGroundBlocks);
+				containerGameGridBackgound[i, u].transform.SetParent (UIBackGroundBlock);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ public class GameGrid : MonoBehaviour {
 		int b = UnityEngine.Random.Range (0, weight);
 		if (gameArray[a, b] == null) {
 			gameArray[a, b] = Instantiate (gameCubePrefab, FixTransformBlockXYZ (a, b, z), Quaternion.identity);
-			gameArray[a, b].transform.SetParent (UIGameBlocks);
+			gameArray[a, b].transform.SetParent (UIGameBlock);
 			int s = Convert.ToInt32 (gameArray[a, b].transform.Find ("Text").GetComponent<TextMeshPro> ().text);
 			gameArray[a, b].GetComponent<SpriteRenderer> ().color = GetColorToBlock (s);
 			gameArray[a, b].transform.DOScale (0.15f, 0.1f).SetLoops (2, LoopType.Yoyo);
