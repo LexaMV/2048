@@ -9,9 +9,12 @@ public class Сontroller : MonoBehaviour
     #region GameObject control
 	private GameObject backGroundBlocks;
 	private GameObject gameBlocks;
+	private GameObject camera;
+	private Vector3 startingPositionCamera;
 	#endregion
 
    #region Canvas control
+  
     public GameGrid gameGrid;
 	private GameObject firstScreen;
 	private GameObject secondScreen;
@@ -27,6 +30,8 @@ public class Сontroller : MonoBehaviour
 
 	
 	void Awake(){
+		camera = GameObject.Find("MainCamera");
+		startingPositionCamera = camera.transform.position;
 		backGroundBlocks = GameObject.Find("BackGroundBlocks");
 		gameBlocks = GameObject.Find("GameBlocks");
 		firstScreen = GameObject.Find("FirstScreen");
@@ -51,27 +56,41 @@ public class Сontroller : MonoBehaviour
 		switch(selectedField){
 			case "4x4":
 			gameGrid.LevelStart(4,4);
+			camera.transform.position = new Vector3(1.46f,camera.transform.position.y,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 4.78f;
 			break;
+
 			case "5x5":
 			gameGrid.LevelStart(5,5);// не работает!!!!?????SS
 			break;
 			case "6x6":
 			gameGrid.LevelStart(6,6);
+			camera.transform.position = new Vector3(2.52f,4.23f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 6.52f;
 			break;
 			case "8x8":
 			gameGrid.LevelStart(8,8);
+			camera.transform.position = new Vector3(3.44f,5.6f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 8.63f;
 			break;
 			case "3x5":
 			gameGrid.LevelStart(3,5);
+			camera.transform.position = new Vector3(0.91f,3.25f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 4.05f;
 			break;
 			case "4x6":
 			gameGrid.LevelStart(4,6);
+			camera.transform.position = new Vector3(1.43f,3.67f,camera.transform.position.z);
 			break;
 			case "5x8":
 			gameGrid.LevelStart(5,8);
+			camera.transform.position = new Vector3(1.88f,5.4f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 6.41f;
 			break;
 			case "6x9":
 			gameGrid.LevelStart(6,9);
+			camera.transform.position = new Vector3(2.37f,5.95f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 7.5f;
 			break;
 		}
 	     
