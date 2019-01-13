@@ -16,6 +16,7 @@ public class Сontroller : MonoBehaviour
    #region Canvas control
   
     public GameGrid gameGrid;
+	public GameObject endGame;
 	private GameObject firstScreen;
 	private GameObject secondScreen;
 	private GameObject recordPanel;
@@ -24,12 +25,14 @@ public class Сontroller : MonoBehaviour
 	private GameObject firstScreenButton;
 	private GameObject secondScreenButton;
 	private GameObject backButton;
+	private GameObject refreshButton;
     #endregion
 
     public string selectedField; 
 
 	
 	void Awake(){
+		endGame = GameObject.Find("EndGame");
 		camera = GameObject.Find("MainCamera");
 		startingPositionCamera = camera.transform.position;
 		backGroundBlocks = GameObject.Find("BackGroundBlocks");
@@ -42,9 +45,12 @@ public class Сontroller : MonoBehaviour
 		firstScreenButton = GameObject.Find("FirstScreenButton");
 		secondScreenButton = GameObject.Find("SecondScreenButton");
 		backButton = GameObject.Find("BackButton");
+		refreshButton = GameObject.Find("RefreshButton");
 	}
 	void Start(){
+		    endGame.SetActive(false);
 		    backButton.SetActive(false);
+			refreshButton.SetActive(false);
 	        secondScreen.SetActive(false);
 			recordPanel.SetActive(false);
 	    	scorePanel.SetActive(false);
@@ -56,10 +62,9 @@ public class Сontroller : MonoBehaviour
 		switch(selectedField){
 			case "4x4":
 			gameGrid.LevelStart(4,4);
-			camera.transform.position = new Vector3(1.46f,camera.transform.position.y,camera.transform.position.z);
+			camera.transform.position = new Vector3(1.46f,2.82f,camera.transform.position.z);
 			camera.GetComponent<Camera>().orthographicSize = 4.78f;
 			break;
-
 			case "5x5":
 			gameGrid.LevelStart(5,5);// не работает!!!!?????SS
 			break;
@@ -80,7 +85,8 @@ public class Сontroller : MonoBehaviour
 			break;
 			case "4x6":
 			gameGrid.LevelStart(4,6);
-			camera.transform.position = new Vector3(1.43f,3.67f,camera.transform.position.z);
+			camera.transform.position = new Vector3(1.51f,3.96f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 5.12f;
 			break;
 			case "5x8":
 			gameGrid.LevelStart(5,8);
@@ -89,7 +95,7 @@ public class Сontroller : MonoBehaviour
 			break;
 			case "6x9":
 			gameGrid.LevelStart(6,9);
-			camera.transform.position = new Vector3(2.37f,5.95f,camera.transform.position.z);
+			camera.transform.position = new Vector3(2.37f,6.28f,camera.transform.position.z);
 			camera.GetComponent<Camera>().orthographicSize = 7.5f;
 			break;
 		}
@@ -105,6 +111,7 @@ public class Сontroller : MonoBehaviour
 		recordPanel.SetActive(true);
 		scorePanel.SetActive(true);
 		backButton.SetActive(true);
+		refreshButton.SetActive(true);
 	}
 
 	public void MenuSrceen(){  // урезать до 3
@@ -125,6 +132,7 @@ public class Сontroller : MonoBehaviour
 		recordPanel.SetActive(false);
 		scorePanel.SetActive(false);
 		backButton.SetActive(false);
+		refreshButton.SetActive(false);
 	}
 
 	public void FirstScreenActive(){

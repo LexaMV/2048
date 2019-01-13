@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class GameGrid : MonoBehaviour {
 
+	public Сontroller controller;
 	public UI ui;
 
 	[Serializable]
@@ -62,20 +63,36 @@ public class GameGrid : MonoBehaviour {
 	}
 	public void CreateGameBlock (int height, int weight, int z) {
 
-		int a = UnityEngine.Random.Range (0, height);
-		int b = UnityEngine.Random.Range (0, weight);
-		if (gameArray[a, b] == null) {
-			gameArray[a, b] = Instantiate (gameCubePrefab, FixTransformBlockXYZ (a, b, z), Quaternion.identity);
-			gameArray[a, b].transform.SetParent (UIGameBlock);
-			int s = Convert.ToInt32 (gameArray[a, b].transform.Find ("Text").GetComponent<TextMeshPro> ().text);
-			gameArray[a, b].GetComponent<SpriteRenderer> ().color = GetColorToBlock (s);
-			gameArray[a, b].transform.DOScale (0.15f, 0.1f).SetLoops (2, LoopType.Yoyo);
-		} else {
-			CreateGameBlock (height, weight, -5);
+		if (AllInGameArrayNoNull(gameArray)) {
+			controller.endGame.SetActive(true);
+		}
+		else{
+				int a = UnityEngine.Random.Range (0, height);
+				int b = UnityEngine.Random.Range (0, weight);
+
+				if (gameArray[a, b] == null) {
+					gameArray[a, b] = Instantiate (gameCubePrefab, FixTransformBlockXYZ (a, b, z), Quaternion.identity);
+					gameArray[a, b].transform.SetParent (UIGameBlock);
+					int s = Convert.ToInt32 (gameArray[a, b].transform.Find ("Text").GetComponent<TextMeshPro> ().text);
+					gameArray[a, b].GetComponent<SpriteRenderer> ().color = GetColorToBlock (s);
+					gameArray[a, b].transform.DOScale (0.15f, 0.1f).SetLoops (2, LoopType.Yoyo);
+				} else {
+					CreateGameBlock (height, weight, -5);
+				}
+			}
+		}
+	
+	public bool AllInGameArrayNoNull(GameObject[,] array){
+    foreach(GameObject o in array){
+		if(o == null){
+			 return false;
+			 break;
 		}
 	}
+     return true;
+	}
 
-	public void GoBlockDown (bool yes) {
+	public void GoBlockDown (bool withCheck) {
 		for (int i = 0; i < height; i++) {
 			for (int u = 0; u < weight; u++) {
 				if (gameArray[i, u] == null && u + 1 != weight) {
@@ -92,13 +109,13 @@ public class GameGrid : MonoBehaviour {
 			}
 		}
 
-		if (yes) {
+		if (withCheck) {
 			CheckDown ();
 			CreateGameBlock (height, weight, -5);
 		}
 
 	}
-	public void GoBlockUP (bool yes) {
+	public void GoBlockUP (bool withCheck) {
 		for (int i = 0; i < height; i++) {
 			for (int u = weight - 1; u > -1; u--) {
 				Debug.Log ("i = " + i + " , " + " u = " + u);
@@ -114,19 +131,19 @@ public class GameGrid : MonoBehaviour {
 				}
 			}
 		}
-		if (yes) {
+		if (withCheck) {
 			CheckUP ();
 			CreateGameBlock (height, weight, -5);
 		}
 	}
 
-	public void GoBlockLeft (bool yes) {
-		for (int u = 0; u < height; u++) {
+	public void GoBlockLeft (bool withCheck) {
+		for (int u = 0; u < weight; u++) {
 			for (int i = 0; i < height; i++) {
 				// Debug.Log("i = " + i + " , " + " u = " + u);
-				if (gameArray[i, u] == null && i + 1 != weight) {
-					for (int o = i; o < weight; o++) {
-						if (o + 1 != weight && gameArray[o + 1, u] != null) {
+				if (gameArray[i, u] == null && i + 1 != height) {
+					for (int o = i; o < height; o++) {
+						if (o + 1 != height && gameArray[o + 1, u] != null) {
 							GameObject gameObject = gameArray[i, u];
 							gameArray[o + 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
 							gameArray[i, u] = gameArray[o + 1, u];
@@ -138,15 +155,15 @@ public class GameGrid : MonoBehaviour {
 			}
 		}
 
-		if (yes) {
+		if (withCheck) {
 			CheckLeft ();
 			CreateGameBlock (height, weight, -5);
 		}
 	}
 
-	public void GoBlockRight (bool yes) {
-		for (int u = weight - 1; u > -1; u--) {
-			for (int i = weight - 1; i > -1; i--) {
+	public void GoBlockRight (bool withCheck) {
+		for (int i = 0; i < height; i++) {
+			for (int u = weight - 1; u > -1; u--) {
 				Debug.Log ("i = " + i + " , " + " u = " + u);
 				if (gameArray[i, u] == null) {
 					for (int o = i; o > -1; o--)
@@ -160,7 +177,7 @@ public class GameGrid : MonoBehaviour {
 				}
 			}
 		}
-		if (yes) {
+		if (withCheck) {
 			CheckRight ();
 			CreateGameBlock (height, weight, -5);
 		}
@@ -203,9 +220,9 @@ public class GameGrid : MonoBehaviour {
 	}
 
 	private void CheckLeft () {
-		for (int u = 0; u < height; u++) {
-			for (int i = 0; i < weight; i++) {
-				if (gameArray[i, u] != null && i + 1 != weight && gameArray[i + 1, u] != null) {
+		for (int u = 0; u < weight; u++) {
+			for (int i = 0; i < height; i++) {
+				if (gameArray[i, u] != null && i + 1 != height && gameArray[i + 1, u] != null) {
 					if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i + 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
 						MultiplicationBy2 (gameArray[i, u]);
 						SetScore (gameArray[i, u]);

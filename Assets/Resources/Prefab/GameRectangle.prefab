@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 971514734170484354}
   - component: {fileID: 7459509709946668650}
   - component: {fileID: 5387467441125927155}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4692751137444546}
   - component: {fileID: 212969896320078522}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameRectangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
