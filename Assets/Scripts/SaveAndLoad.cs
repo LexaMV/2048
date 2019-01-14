@@ -4,21 +4,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UI : MonoBehaviour
+public class SaveAndLoad : MonoBehaviour
 {
   public int intRecord;
   public TextMeshProUGUI record;
   public TextMeshProUGUI score;
 
-     void SaveRecordPoints() {
+     public void SaveRecordPoints() {
 
          intRecord = Convert.ToInt32(record.text);
+     //     ES2.Save(intRecord,"RecordScore");
          PlayerPrefs.SetInt("RecordScore", intRecord);
          PlayerPrefs.Save();
      }
 
-     void LoadRecordPoints() {
+     public void LoadRecordPoints() {
           intRecord = PlayerPrefs.GetInt("RecordScore");
+          // intRecord = ES2.Load<int>("RecordScore");
           record.text = intRecord.ToString();
      }
 

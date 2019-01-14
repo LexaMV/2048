@@ -66,7 +66,8 @@ public class Сontroller : MonoBehaviour
 			camera.GetComponent<Camera>().orthographicSize = 4.78f;
 			break;
 			case "5x5":
-			gameGrid.LevelStart(5,5);// не работает!!!!?????SS
+			gameGrid.LevelStart(5,5);
+			camera.transform.position = new Vector3(1.97f,3.25f,camera.transform.position.z);
 			break;
 			case "6x6":
 			gameGrid.LevelStart(6,6);
@@ -114,7 +115,7 @@ public class Сontroller : MonoBehaviour
 		refreshButton.SetActive(true);
 	}
 
-	public void MenuSrceen(){  // урезать до 3
+	public void BackToMenuSrceen(){  // урезать до 3
 
        foreach(Transform o in backGroundBlocks.transform){
 		   Destroy(o.gameObject);
@@ -143,6 +144,17 @@ public class Сontroller : MonoBehaviour
 	public void SecondScreenActive(){
 		firstScreen.SetActive(false);
 		secondScreen.SetActive(true);
+	}
+
+    public void CleanGrid () {
+
+		foreach(Transform o in gameBlocks.transform){
+		   Destroy(o.gameObject);
+	   }
+
+	   gameGrid.CreateGameBlock(gameGrid.height,gameGrid.weight, -5);
+
+
 	}
 
 

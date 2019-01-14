@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameGrid : MonoBehaviour {
 
 	public Сontroller controller;
-	public UI ui;
+	public SaveAndLoad saveAndLoad;
 
 	[Serializable]
 	public struct Map {
@@ -18,8 +18,8 @@ public class GameGrid : MonoBehaviour {
 	public Map[] colors;
 	public GameObject backGroundCubePrefab;
 	public GameObject gameCubePrefab;
-	private int height;
-	private int weight;
+	public int height;
+	public int weight;
 	public static float POS_SCALE = 1f;
 	public static float POS_OFFSET_X = 0;
 	public static float POS_OFFSET_Y = 0;
@@ -31,6 +31,8 @@ public class GameGrid : MonoBehaviour {
 	public void LevelStart (int height, int weight) {
 		this.height = height;
 		this.weight = weight;
+		// saveAndLoad.LoadRecordPoints();
+		saveAndLoad.score.text = "0";
 		CreateArrays (height, weight);
 		CreateBackgroundGameGrid (height, weight);
 		CreateGameBlock (height, weight, -5);
@@ -65,6 +67,7 @@ public class GameGrid : MonoBehaviour {
 
 		if (AllInGameArrayNoNull(gameArray)) {
 			controller.endGame.SetActive(true);
+			saveAndLoad.SaveRecordPoints();
 		}
 		else{
 				int a = UnityEngine.Random.Range (0, height);
@@ -118,7 +121,7 @@ public class GameGrid : MonoBehaviour {
 	public void GoBlockUP (bool withCheck) {
 		for (int i = 0; i < height; i++) {
 			for (int u = weight - 1; u > -1; u--) {
-				Debug.Log ("i = " + i + " , " + " u = " + u);
+				// Debug.Log ("i = " + i + " , " + " u = " + u);
 				if (gameArray[i, u] == null && u - 1 != -1) {
 					for (int o = u; o > -1; o--)
 						if (o - 1 != -1 && gameArray[i, o - 1] != null) {
@@ -162,8 +165,10 @@ public class GameGrid : MonoBehaviour {
 	}
 
 	public void GoBlockRight (bool withCheck) {
-		for (int i = 0; i < height; i++) {
+		 for (int i = height - 1; i > -1; i--) {
+		// for (int i = 0; i < height; i++) {
 			for (int u = weight - 1; u > -1; u--) {
+				// for (int u = weight - 1; u > -1; u--) {
 				Debug.Log ("i = " + i + " , " + " u = " + u);
 				if (gameArray[i, u] == null) {
 					for (int o = i; o > -1; o--)
@@ -191,7 +196,7 @@ public class GameGrid : MonoBehaviour {
 						MultiplicationBy2 (gameArray[i, u]);
 						SetScore (gameArray[i, u]);
 						SetColor (gameArray[i, u]);
-						ui.UpdateRecordPoint ();
+						saveAndLoad.UpdateRecordPoint ();
 						Destroy (gameArray[i, u - 1].gameObject);
 						gameArray[i, u - 1] = null;
 						GoBlockUP (false);
@@ -202,17 +207,17 @@ public class GameGrid : MonoBehaviour {
 	}
 
 	private void CheckRight () {
-		for (int u = weight - 1; u > -1; u--) {
-			for (int i = 0; i < height; i++) {
+			for (int i = height - 1; i > -1; i--) {
+			for (int u = weight - 1; u > -1; u--) {
 				if (gameArray[i, u] != null && i - 1 != -1 && gameArray[i - 1, u] != null) {
 					if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i - 1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
 						MultiplicationBy2 (gameArray[i, u]);
 						SetScore (gameArray[i, u]);
 						SetColor (gameArray[i, u]);
-						ui.UpdateRecordPoint ();
+						saveAndLoad.UpdateRecordPoint ();
 						Destroy (gameArray[i - 1, u].gameObject);
 						gameArray[i - 1, u] = null;
-						GoBlockUP (false);
+						GoBlockRight (false);
 					}
 				}
 			}
@@ -227,7 +232,7 @@ public class GameGrid : MonoBehaviour {
 						MultiplicationBy2 (gameArray[i, u]);
 						SetScore (gameArray[i, u]);
 						SetColor (gameArray[i, u]);
-						ui.UpdateRecordPoint ();
+						saveAndLoad.UpdateRecordPoint ();
 						Destroy (gameArray[i + 1, u].gameObject);
 						gameArray[i + 1, u] = null;
 						GoBlockLeft (false);
@@ -245,7 +250,7 @@ public class GameGrid : MonoBehaviour {
 						MultiplicationBy2 (gameArray[i, u]);
 						SetScore (gameArray[i, u]);
 						SetColor (gameArray[i, u]);
-						ui.UpdateRecordPoint ();
+						saveAndLoad.UpdateRecordPoint ();
 						Destroy (gameArray[i, u + 1].gameObject);
 						gameArray[i, u + 1] = null;
 						GoBlockDown (false);
@@ -266,8 +271,8 @@ public class GameGrid : MonoBehaviour {
 
 	private void SetScore (GameObject gameObject) {
 		int s = Convert.ToInt32 (gameObject.transform.Find ("Text").GetComponent<TextMeshPro> ().text);
-		int a = Convert.ToInt32 (ui.score.text);
-		ui.score.text = (s + a).ToString ();
+		int a = Convert.ToInt32 (saveAndLoad.score.text);
+		saveAndLoad.score.text = (s + a).ToString ();
 	}
 	public static Vector3 FixTransformBlockXY (int x, int y) {
 		return new Vector3 ((x + POS_OFFSET_X) * POS_SCALE, (y + POS_OFFSET_Y) * POS_SCALE, 0);

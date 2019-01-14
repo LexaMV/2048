@@ -6,6 +6,7 @@ public class СhoiceField : MonoBehaviour
 {
    public void Field(){
        GameObject.Find("MainCamera").GetComponent<Сontroller>().selectedField = gameObject.name;
+       Debug.Log(gameObject.name);
    }
    
 }

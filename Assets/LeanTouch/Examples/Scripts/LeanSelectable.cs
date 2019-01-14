@@ -82,10 +82,8 @@ namespace Lean.Touch
 				// Hide IsSelected?
 				if (HideWithFinger == true && isSelected == true && selectingFingers.Count > 0)
 				{
-					Debug.Log("2");
 					return false;
 				}
-                Debug.Log(gameObject.name);
 				return isSelected;
 			}
 		}
