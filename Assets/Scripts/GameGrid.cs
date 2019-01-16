@@ -31,8 +31,8 @@ public class GameGrid : MonoBehaviour {
 	public void LevelStart (int height, int weight) {
 		this.height = height;
 		this.weight = weight;
-		// saveAndLoad.LoadRecordPoints();
 		saveAndLoad.score.text = "0";
+		saveAndLoad.LoadRecordPoints();
 		CreateArrays (height, weight);
 		CreateBackgroundGameGrid (height, weight);
 		CreateGameBlock (height, weight, -5);
@@ -66,8 +66,10 @@ public class GameGrid : MonoBehaviour {
 	public void CreateGameBlock (int height, int weight, int z) {
 
 		if (AllInGameArrayNoNull(gameArray)) {
-			controller.endGame.SetActive(true);
-			saveAndLoad.SaveRecordPoints();
+			if(!CheckAllGrid()){
+				Debug.Log("ПРОИГРЫШ!!!");
+			controller.EndGame();
+		}
 		}
 		else{
 				int a = UnityEngine.Random.Range (0, height);
@@ -258,6 +260,86 @@ public class GameGrid : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	private bool CheckAllGrid(){
+            for (int i = 0; i < height; i++) {
+				Debug.Log("-1");
+			for (int u = 0; u < weight; u++) {
+Debug.Log("0");
+Debug.Log("i = "+ i +"u ="+u);
+
+                if(u - 1 >= 0){
+				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i, u - 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString())) {
+				Debug.Log("1");
+			    return true;
+				break;
+			
+				}
+				}
+
+                if(u + 1 < weight){
+				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i, u + 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			    Debug.Log("2");
+				return true;
+				break;
+			}
+				}
+
+                if(i + 1 < height){
+				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			    
+				Debug.Log("3");
+				return true;
+				break;
+			}
+				}
+                
+				if(i - 1 >= 0){
+				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			    Debug.Log("4");
+				return true;
+				break;
+			}
+				}
+
+            //     if(i + 1 < height && u + 1 < weight ){
+			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u+1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			//     Debug.Log("5");
+			// 	return true;
+			// 	break;
+			// }
+			// 	}
+
+            // if(i - 1 > 0 && u - 1 >= 0){
+			// if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u-1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			//     Debug.Log("6");
+			// 	return true;
+			// 	break;
+			// }
+			// }
+
+            // if(i  - 1 >= 0 && u + 1 < weight){
+			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u+1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			//     Debug.Log("8");
+			// 	return true;
+			// 	break;
+			// }
+			// }
+
+            // if(i  + 1 < height && u - 1 >= 0){
+			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u-1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
+			//     Debug.Log("9");
+			// 	return true;
+			// 	break;
+			// }
+			// }
+	
+			}
+			}
+			Debug.Log("FALSE");
+	return false;
+	
 	}
 
 	private void MultiplicationBy2 (GameObject gameObject) {

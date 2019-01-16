@@ -7,6 +7,7 @@ public class Сontroller : MonoBehaviour
 {
 
     #region GameObject control
+	public SaveAndLoad saveAndLoad;
 	private GameObject backGroundBlocks;
 	private GameObject gameBlocks;
 	private GameObject camera;
@@ -14,44 +15,45 @@ public class Сontroller : MonoBehaviour
 	#endregion
 
    #region Canvas control
-  
+    public GameObject directions;
     public GameGrid gameGrid;
 	public GameObject endGame;
-	private GameObject firstScreen;
-	private GameObject secondScreen;
-	private GameObject recordPanel;
-	private GameObject scorePanel;
-	private GameObject playButton;
-	private GameObject firstScreenButton;
-	private GameObject secondScreenButton;
-	private GameObject backButton;
-	private GameObject refreshButton;
+	public GameObject firstScreenMenu;
+	public GameObject secondScreenMenu;
+	public GameObject recordPanel;
+	public GameObject scorePanel;
+	public GameObject playButton;
+	public GameObject firstScreenMenuButton;
+	public GameObject secondScreenMenuButton;
+	public GameObject backButton;
+	public GameObject refreshButton;
     #endregion
 
     public string selectedField; 
 
 	
 	void Awake(){
-		endGame = GameObject.Find("EndGame");
+		// directions = GameObject.Find("Directions");
+		// endGame = GameObject.Find("EndGame");
 		camera = GameObject.Find("MainCamera");
-		startingPositionCamera = camera.transform.position;
+		// startingPositionCamera = camera.transform.position;
 		backGroundBlocks = GameObject.Find("BackGroundBlocks");
-		gameBlocks = GameObject.Find("GameBlocks");
-		firstScreen = GameObject.Find("FirstScreen");
-		secondScreen = GameObject.Find("SecondScreen");
-		recordPanel = GameObject.Find("RecordPanel");
-		scorePanel = GameObject.Find("ScorePanel");
-		playButton = GameObject.Find("PlayButton");
-		firstScreenButton = GameObject.Find("FirstScreenButton");
-		secondScreenButton = GameObject.Find("SecondScreenButton");
-		backButton = GameObject.Find("BackButton");
-		refreshButton = GameObject.Find("RefreshButton");
+	     gameBlocks = GameObject.Find("GameBlocks");
+		// firstScreenMenu = GameObject.Find("FirstScreenMenu");
+		// secondScreenMenu = GameObject.Find("SecondScreenMenu");
+		// recordPanel = GameObject.Find("RecordPanel");
+		// scorePanel = GameObject.Find("ScorePanel");
+		// playButton = GameObject.Find("PlayButton");
+		// firstScreenMenuButton = GameObject.Find("FirstScreenMenuButton");
+		// secondScreenMenuButton = GameObject.Find("SecondScreenMenuButton");
+		// backButton = GameObject.Find("BackButton");
+		// refreshButton = GameObject.Find("RefreshButton");
 	}
 	void Start(){
 		    endGame.SetActive(false);
 		    backButton.SetActive(false);
 			refreshButton.SetActive(false);
-	        secondScreen.SetActive(false);
+	        secondScreenMenu.SetActive(false);
 			recordPanel.SetActive(false);
 	    	scorePanel.SetActive(false);
 	}
@@ -103,12 +105,14 @@ public class Сontroller : MonoBehaviour
 	     
 	}
 
-	public void GameSrceen(){ // урезать до 3
-		firstScreen.SetActive(false);
-		secondScreen.SetActive(false);
+	public void GameSrceen(){ 
+	    refreshButton.SetActive(true);
+	    directions.SetActive(true);
+		firstScreenMenu.SetActive(false);
+		secondScreenMenu.SetActive(false);
 		playButton.SetActive(false);
-		firstScreenButton.SetActive(false);
-		secondScreenButton.SetActive(false);
+		firstScreenMenuButton.SetActive(false);
+		secondScreenMenuButton.SetActive(false);
 		recordPanel.SetActive(true);
 		scorePanel.SetActive(true);
 		backButton.SetActive(true);
@@ -118,6 +122,7 @@ public class Сontroller : MonoBehaviour
 	public void BackToMenuSrceen(){  // урезать до 3
 
        foreach(Transform o in backGroundBlocks.transform){
+           saveAndLoad.SaveRecordPoints();
 		   Destroy(o.gameObject);
 	   }
 
@@ -125,27 +130,48 @@ public class Сontroller : MonoBehaviour
 		   Destroy(o.gameObject);
 	   }
 
-		firstScreen.SetActive(true);
+		firstScreenMenu.SetActive(true);
 		// secondScreen.SetActive(true);
 		playButton.SetActive(true);
-		firstScreenButton.SetActive(true);
-		secondScreenButton.SetActive(true);
+		firstScreenMenuButton.SetActive(true);
+		secondScreenMenuButton.SetActive(true);
 		recordPanel.SetActive(false);
 		scorePanel.SetActive(false);
 		backButton.SetActive(false);
 		refreshButton.SetActive(false);
+		endGame.SetActive(false);
 	}
 
 	public void FirstScreenActive(){
-		firstScreen.SetActive(true);
-		secondScreen.SetActive(false);
+		firstScreenMenu.SetActive(true);
+		secondScreenMenu.SetActive(false);
 	}
+
 
 	public void SecondScreenActive(){
-		firstScreen.SetActive(false);
-		secondScreen.SetActive(true);
+		firstScreenMenu.SetActive(false);
+		secondScreenMenu.SetActive(true);
 	}
 
+	public void EndGame(){
+		 directions.SetActive(false);
+		 refreshButton.SetActive(false);
+		 DestroyAllGameObject();
+		 endGame.SetActive(true);
+		 saveAndLoad.SaveRecordPoints();
+
+	}
+    
+	public void DestroyAllGameObject(){
+
+           foreach(Transform o in gameBlocks.transform){
+		   Destroy(o.gameObject);
+	   }
+
+	     foreach(Transform o in backGroundBlocks.transform){
+		   Destroy(o.gameObject);
+	   }
+	}
     public void CleanGrid () {
 
 		foreach(Transform o in gameBlocks.transform){
