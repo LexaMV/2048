@@ -67,7 +67,6 @@ public class GameGrid : MonoBehaviour {
 
 		if (AllInGameArrayNoNull(gameArray)) {
 			if(!CheckAllGrid()){
-				Debug.Log("ПРОИГРЫШ!!!");
 			controller.EndGame();
 		}
 		}
@@ -104,7 +103,7 @@ public class GameGrid : MonoBehaviour {
 					for (int o = u; o < weight; o++) {
 						if (o + 1 != weight && gameArray[i, o + 1] != null) {
 							GameObject gameObject = gameArray[i, u];
-							gameArray[i, o + 1].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							gameArray[i, o + 1].transform.DOMove (new Vector3 (i, u, -5), 0.25f);
 							gameArray[i, u] = gameArray[i, o + 1];
 							gameArray[i, o + 1] = gameObject;
 							break;
@@ -123,12 +122,11 @@ public class GameGrid : MonoBehaviour {
 	public void GoBlockUP (bool withCheck) {
 		for (int i = 0; i < height; i++) {
 			for (int u = weight - 1; u > -1; u--) {
-				// Debug.Log ("i = " + i + " , " + " u = " + u);
 				if (gameArray[i, u] == null && u - 1 != -1) {
 					for (int o = u; o > -1; o--)
 						if (o - 1 != -1 && gameArray[i, o - 1] != null) {
 							GameObject gameObject = gameArray[i, u];
-							gameArray[i, o - 1].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							gameArray[i, o - 1].transform.DOMove (new Vector3 (i, u, -5), 0.25f);
 							gameArray[i, u] = gameArray[i, o - 1];
 							gameArray[i, o - 1] = gameObject;
 							break;
@@ -145,12 +143,11 @@ public class GameGrid : MonoBehaviour {
 	public void GoBlockLeft (bool withCheck) {
 		for (int u = 0; u < weight; u++) {
 			for (int i = 0; i < height; i++) {
-				// Debug.Log("i = " + i + " , " + " u = " + u);
 				if (gameArray[i, u] == null && i + 1 != height) {
 					for (int o = i; o < height; o++) {
 						if (o + 1 != height && gameArray[o + 1, u] != null) {
 							GameObject gameObject = gameArray[i, u];
-							gameArray[o + 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							gameArray[o + 1, u].transform.DOMove (new Vector3 (i, u, -5), 0.25f);
 							gameArray[i, u] = gameArray[o + 1, u];
 							gameArray[o + 1, u] = gameObject;
 							break;
@@ -176,7 +173,7 @@ public class GameGrid : MonoBehaviour {
 					for (int o = i; o > -1; o--)
 						if (o - 1 != -1 && gameArray[o - 1, u] != null) {
 							GameObject gameObject = gameArray[i, u];
-							gameArray[o - 1, u].transform.DOMove (new Vector3 (i, u, -5), 0f);
+							gameArray[o - 1, u].transform.DOMove (new Vector3 (i, u, -5), 0.25f);
 							gameArray[i, u] = gameArray[o - 1, u];
 							gameArray[o - 1, u] = gameObject;
 							break;
@@ -266,8 +263,6 @@ public class GameGrid : MonoBehaviour {
             for (int i = 0; i < height; i++) {
 				Debug.Log("-1");
 			for (int u = 0; u < weight; u++) {
-Debug.Log("0");
-Debug.Log("i = "+ i +"u ="+u);
 
                 if(u - 1 >= 0){
 				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i, u - 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString())) {
@@ -280,16 +275,13 @@ Debug.Log("i = "+ i +"u ="+u);
 
                 if(u + 1 < weight){
 				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i, u + 1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			    Debug.Log("2");
-				return true;
+                return true;
 				break;
 			}
 				}
 
                 if(i + 1 < height){
 				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			    
-				Debug.Log("3");
 				return true;
 				break;
 			}
@@ -297,47 +289,14 @@ Debug.Log("i = "+ i +"u ="+u);
                 
 				if(i - 1 >= 0){
 				if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			    Debug.Log("4");
 				return true;
 				break;
 			}
 				}
 
-            //     if(i + 1 < height && u + 1 < weight ){
-			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u+1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			//     Debug.Log("5");
-			// 	return true;
-			// 	break;
-			// }
-			// 	}
-
-            // if(i - 1 > 0 && u - 1 >= 0){
-			// if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u-1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			//     Debug.Log("6");
-			// 	return true;
-			// 	break;
-			// }
-			// }
-
-            // if(i  - 1 >= 0 && u + 1 < weight){
-			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i-1, u+1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			//     Debug.Log("8");
-			// 	return true;
-			// 	break;
-			// }
-			// }
-
-            // if(i  + 1 < height && u - 1 >= 0){
-			// 	if (Convert.ToInt32 (gameArray[i, u].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ()) == Convert.ToInt32 (gameArray[i+1, u-1].transform.Find ("Text").GetComponent<TextMeshPro> ().text.ToString ())) {
-			//     Debug.Log("9");
-			// 	return true;
-			// 	break;
-			// }
-			// }
-	
 			}
 			}
-			Debug.Log("FALSE");
+		
 	return false;
 	
 	}

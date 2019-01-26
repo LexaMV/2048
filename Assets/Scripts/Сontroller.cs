@@ -56,6 +56,7 @@ public class Сontroller : MonoBehaviour
 	        secondScreenMenu.SetActive(false);
 			recordPanel.SetActive(false);
 	    	scorePanel.SetActive(false);
+			directions.SetActive(false);
 	}
 
 	public void PlayGame(){
@@ -70,6 +71,7 @@ public class Сontroller : MonoBehaviour
 			case "5x5":
 			gameGrid.LevelStart(5,5);
 			camera.transform.position = new Vector3(1.97f,3.25f,camera.transform.position.z);
+			camera.GetComponent<Camera>().orthographicSize = 5.45f;
 			break;
 			case "6x6":
 			gameGrid.LevelStart(6,6);
@@ -131,7 +133,7 @@ public class Сontroller : MonoBehaviour
 	   }
 
 		firstScreenMenu.SetActive(true);
-		// secondScreen.SetActive(true);
+		directions.SetActive(false);
 		playButton.SetActive(true);
 		firstScreenMenuButton.SetActive(true);
 		secondScreenMenuButton.SetActive(true);
