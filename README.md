@@ -4,7 +4,8 @@ A small clone of 2048.
 
 Made just for fun. 
 
-The official app can be found on the Play Store !
+
+The official app can be found on the Play Store ! (https://play.google.com/store/apps/details?id=com.lexamv.ttfev2)
 
 Contributions
 
