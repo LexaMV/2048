@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lean.Touch;
 using UnityEngine;
+using UnityEngine.Advertisements;
 
 public class Сontroller : MonoBehaviour
 {
@@ -25,31 +26,30 @@ public class Сontroller : MonoBehaviour
 	public GameObject playButton;
 	public GameObject firstScreenMenuButton;
 	public GameObject secondScreenMenuButton;
-	public GameObject backButton;
+    public GameObject backButton;
 	public GameObject refreshButton;
     #endregion
 
     public string selectedField; 
 
+	#region ADS control
+	public int ADS;
+	#endregion
+
 	
 	void Awake(){
-		// directions = GameObject.Find("Directions");
-		// endGame = GameObject.Find("EndGame");
+
+        ADS = 0;
 		camera = GameObject.Find("MainCamera");
-		// startingPositionCamera = camera.transform.position;
 		backGroundBlocks = GameObject.Find("BackGroundBlocks");
-	     gameBlocks = GameObject.Find("GameBlocks");
-		// firstScreenMenu = GameObject.Find("FirstScreenMenu");
-		// secondScreenMenu = GameObject.Find("SecondScreenMenu");
-		// recordPanel = GameObject.Find("RecordPanel");
-		// scorePanel = GameObject.Find("ScorePanel");
-		// playButton = GameObject.Find("PlayButton");
-		// firstScreenMenuButton = GameObject.Find("FirstScreenMenuButton");
-		// secondScreenMenuButton = GameObject.Find("SecondScreenMenuButton");
-		// backButton = GameObject.Find("BackButton");
-		// refreshButton = GameObject.Find("RefreshButton");
+	    gameBlocks = GameObject.Find("GameBlocks");
 	}
 	void Start(){
+
+            if(Advertisement.isSupported){
+               Advertisement.Initialize("3056381",false);
+			}
+
 		    endGame.SetActive(false);
 		    backButton.SetActive(false);
 			refreshButton.SetActive(false);
@@ -155,12 +155,24 @@ public class Сontroller : MonoBehaviour
 		secondScreenMenu.SetActive(true);
 	}
 
+
+
 	public void EndGame(){
+		 ADS++;
+
+		 if(ADS == 3){
+			if(Advertisement.IsReady()){
+				Advertisement.Show();
+				ADS = 0;
+			}
+		}
+
 		 directions.SetActive(false);
 		 refreshButton.SetActive(false);
 		 DestroyAllGameObject();
 		 endGame.SetActive(true);
 		 saveAndLoad.SaveRecordPoints();
+
 
 	}
     
